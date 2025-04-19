@@ -1,73 +1,52 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HerdMate | Home</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HerdMate</title>
 </head>
 <body>
-  <header>
-    <h1>HerdMate</h1>
-    <nav>
-      <button onclick="navigate('home')">Home</button>
-      <button onclick="navigate('calving')">Calving Calculator</button>
-    </nav>
-  </header>
-
-  <main id="page-content"></main>
-
+  <main id="main-content"></main>
   <script>
-    function navigate(page) {
-      const content = document.getElementById('page-content');
-      if (page === 'home') {
-        content.innerHTML = `
-          <section>
-            <h2>Welcome to HerdMate</h2>
-            <p>This is your central hub for managing livestock data.</p>
-          </section>
-        `;
-      } else if (page === 'calving') {
-        content.innerHTML = `
-          <section>
-            <h2>Calving Calculator</h2>
-            <form id="calving-form">
-              <label>Animal Name:<br><input type="text" id="animal-name"></label><br>
-              <label>Service Date:<br><input type="date" id="service-date"></label><br>
-              <label>Bull Name:<br><input type="text" id="bull-name"></label><br>
-              <label>Gestation Length (days):<br><input type="number" id="gestation-length" value="283"></label><br>
-              <button type="submit">Calculate Due Date</button>
-            </form>
-            <div id="calving-results"></div>
-          </section>
-        `;
-
-        document.getElementById('calving-form').onsubmit = function(e) {
-          e.preventDefault();
-          const name = document.getElementById('animal-name').value;
-          const date = new Date(document.getElementById('service-date').value);
-          const bull = document.getElementById('bull-name').value;
-          const gestation = parseInt(document.getElementById('gestation-length').value);
-
-          if (!name || !date || !bull || isNaN(gestation)) {
-            alert("Please complete all fields.");
-            return;
-          }
-
-          const dueDate = new Date(date);
-          dueDate.setDate(dueDate.getDate() + gestation);
-
-          const resultHtml = `
-            <p><strong>${name}</strong> served by <strong>${bull}</strong> on ${date.toDateString()} has an expected calving date of <strong>${dueDate.toDateString()}</strong>.</p>
-          `;
-
-          document.getElementById('calving-results').innerHTML = resultHtml;
+    function renderPage(page) {
+      if (mode === 'sheep') {
+        switch (page) {
+          case 'dashboard':
+            renderDashboard(); break;
+          case 'animals':
+            renderSheepForm(); break;
+          case 'weights':
+            renderSheepWeights(); break;
+          case 'treatments':
+            renderSheepTreatments(); break;
+          case 'settings':
+            renderSettings(); break;
+          default:
+            main.innerHTML = `<section><h2>FlockMate page not found</h2></section>`;
         }
+        return;
+      }
+
+      switch (page) {
+        case 'dashboard':
+          renderDashboard(); break;
+        case 'animals':
+          renderAnimals(); break;
+        case 'calving':
+          renderCalving(); break;
+        case 'weights':
+          renderWeights(); break;
+        case 'treatments':
+          renderTreatments(); break;
+        case 'reminders':
+          renderReminders(); break;
+        case 'settings':
+          renderSettings(); break;
+        default:
+          main.innerHTML = `<section><h2>Page not found</h2></section>`;
       }
     }
-
-    // Load Home by default
-    window.onload = () => navigate('home');
   </script>
 </body>
 </html>
